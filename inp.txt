@@ -1,9 +1,0 @@
-Code	Amount	Purchased By	Program	Prog. Year	Category
-105944009	$455.24	lizpariz	Dotr	2014	Teacher Food
-105958537	$404.91	lisayz	Chair	2015	Food
-105969805	$19.35	navarre	Splash	2014	Class Supplies
-105969804	$10.10	navarre	Splash	2014	Class Supplies
-105969803	$75.00	navarre	Splash	2014	Class Supplies
-105969790	$40.86	navarre	Splash	2014	Class Supplies
-105969791	$23.99	navarre	120	2014	Class Supplies
-105969792	$106.75	navarre	Splash	2014	Class Supplies
