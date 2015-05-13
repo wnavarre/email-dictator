@@ -1,0 +1,3 @@
+SEND = False
+CONFIRMATION_EMAIL = ""
+SERVER = ""
