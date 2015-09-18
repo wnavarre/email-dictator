@@ -1,7 +1,7 @@
 import template as t
 
 def test_template_once(inp, vals, funcs, output):
-    actual = t.template(inp)(vals, funcs)
+    actual = t.Template(inp).parse(vals, funcs)
     print (inp, vals, funcs, output, actual)
     assert(actual == output)
     print True

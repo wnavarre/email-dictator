@@ -36,11 +36,11 @@ def addressList(st):
     return out
 
 class Message:
-    def __init__(self, fields):
-        fields = validateFields(fields)
+    def __init__(self, headers, body):
+        fields = validateFields(headers)
         self.to_envelope = addressList(fields["To"])+addressList(fields["Bcc"])+addressList(fields["Cc"])
         self.from_envelope = fields["From"]
-        msg = MIMEText(fields["Body"])
+        msg = MIMEText(body)
         for f in VALID_MESSAGE_HEADERS:
             msg[f] = fields[f]
         self.msg_string = msg.as_string()

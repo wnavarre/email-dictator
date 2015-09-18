@@ -1,6 +1,7 @@
+import config
 
-boolean_strict = True #Prompt on boolean error? 
-boolean_default = None #If boolean fails, what is assumed.  Does nothing if boolean_strict = True
+boolean_strict = config.BOOLEAN_STRICT 
+boolean_default = config.BOOLEAN_DEFAULT
 
 boolean_true = ["y", "yes", "true", "t"]
 boolean_true = boolean_true + [x + "." for x in boolean_true]
@@ -13,8 +14,8 @@ interface_false = ["f", "false"]
 def parse_cell(cell):
     return cell.strip()
 
-def get_boolean(cell, t = boolean_true, f = boolean_false):
-    cell = cell.lower() #Case Insensitive.  
+def get_boolean(cell):
+    cell = cell.lower() # Case Insensitive.  
     if cell in t:
         return True
     if cell in f:
@@ -29,3 +30,6 @@ def get_boolean(cell, t = boolean_true, f = boolean_false):
             return True
         if user in interface_false:
             return False
+
+def starts_with(prefix, string):
+    return bool(string[0:len(prefix)] == prefix)

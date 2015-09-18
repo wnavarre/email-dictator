@@ -1,5 +1,5 @@
 import script
-import data
+import helper
 
 TEMPLATE_FILE = "INP/template.txt"
 SPREADSHEET_FILE = "INP/spreadsheet.csv"
@@ -8,7 +8,7 @@ def RELEVANT(vals, funcs):
     return True
     
 def care(vals, funcs):
-    if data.get_boolean(vals["should I care?"]):
+    if helper.get_boolean(vals["should I care?"]):
         return "The spreadsheet says I should care."
     else:
         return "The spreadsheet says I ought not care too much."

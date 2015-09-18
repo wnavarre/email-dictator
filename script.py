@@ -1,24 +1,24 @@
-import make_email_template
-import spreadsheet
+import template
 import template
 import smtplib
 import config
 import mess
-
-def run(TEMPLATE_FILE, SPREADSHEET_FILE, RELEVANT = lambda x, y: True, FUNCS = {}):
-    template_data = make_email_template.get_template(TEMPLATE_FILE)
-    rows = spreadsheet.import_spreadsheet(SPREADSHEET_FILE)
-
-    ourTemplate = template.EmailTemplate(template_data)
-
-    emails = []
-    for row in rows:
-        if RELEVANT(row, FUNCS):
-            emails.append(ourTemplate.render(row, FUNCS))
-
+import csv
+CSV_DELIMITER = config.CSV_DELIMITER
+def run(TEMPLATE_FILENAME, SPREADSHEET_FILE, RELEVANT = lambda x, y: True, FUNCS = {}):
+    with open(TEMPLATE_FILENAME, 'r') as template_file:
+        email_template = template.EmailTemplate(template_file)
+    with open(SPREADSHEET_FILE, "r") as spreadsheet_file_pointer:
+        rows = csv.DictReader(spreadsheet_file_pointer)
+        emails = []
+        for row in rows:
+            print row
+            if RELEVANT(row, FUNCS):
+                emails.append(email_template.render(row, FUNCS))
     connection = smtplib.SMTP(config.SERVER)
 
-    [print i for i in emails]
+    for i in emails:
+        print i
 
     if config.SEND:
         for email in emails:

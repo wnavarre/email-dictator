@@ -1,47 +1,69 @@
+import config
+import template
 import string
+import helper
 import email
 import mess
 
-SEPARATOR = "@@@"
-LAMBDA = "\\"
+HEADER_ENDING = config.HEADER_ENDING
+SEPARATOR = config.SEPARATOR
+LAMBDA = config.LAMBDA
 
-class SimpleTemplate:
-    def __init__(self, inp):
-        self.render = self.template(inp)
+def split_header(data):
+    '''
+    data: a string of the form "header_name: header_value"
+    returns: a tuple of the form (header_name, header_value)
+    '''
+    colon = string.find(data, ":")
+    assert(colon > -1)
+    key = data[0 : colon].capitalize()
+    val = data[colon +1 : ]
+    return (key, val)
 
-    def _parseField(self, inp):
-        def out(vals, funcs):
-            assert(type(vals)==dict)
-            if inp[0] == LAMBDA:
-                name = inp[1:]
-                return funcs[name](vals, funcs)
+class Template():
+    def __init__(self, template_string):
+        self.template_string = template_string
+    def render(self, *args):
+        return self.render_all(*args)
+    def render_all(self, variable_values, function_values):
+        '''
+        returns a string where all fields of the template have been resolved according
+        to variable_values and function_values.
+        
+        variable_values: dictionary (variable_name -> variable_value)
+        function_values: dictionary (function_name -> function)
+        '''
+        fragments_in = self.template_string.split(SEPARATOR)
+        fragments_out = []
+        for i in range(len(fragments_in)):
+            if i%2 == 0:
+                to_append = fragments_in[i]
             else:
-                return vals[inp]
-        return out
-
-    def _parse(self, (inp, isfield), vals, funcs):
-        if isfield:
-            return str(self._parseField(inp)(vals, funcs))
+                to_append = self.render_one(fragments_in[i], variable_values, function_values)
+            fragments_out.append(to_append)
+        return "".join(map(str, fragments_out))
+    def render_one(self, placeholder, variable_values, function_values):
+        if helper.starts_with(LAMBDA, placeholder):
+            function_name = placeholder[len(LAMBDA):]
+            return function_values[function_name](variable_values, function_values)
         else:
-            return str(inp)
+            # Normal variable case.
+            return variable_values[placeholder]
 
-    def template(self, st):
-        is_field = False
-        pieces = [([], not is_field)] + string.split(st, SEPARATOR)
-        def helper((out_list, was_field), elem, vs, fs):
-            new_list = out_list + [self._parse((elem, not was_field), vs, fs)]
-            return (new_list, not was_field)
-        def out(vals, funcs = {}):
-            return "".join(reduce(lambda x, y: helper(x, y, vals, funcs), pieces)[0])
-        return out
+class EmailTemplate():
+    def __init__(self, file_reference):
+        self.fields = {}
+        while True: # get the headers.
+            line = file_reference.readline().strip()
+            if line.strip() == HEADER_ENDING: break
+            k, v = split_header(line)
+            self.fields[k] = Template(v)
+        self.body = Template("".join(file_reference.readlines()))
 
-class EmailTemplate:
-    def __init__(self, fields):
-        assert(type(fields)==dict)
-        #mess.validateFields(fields)
-        self.templates = {k : SimpleTemplate(v) for (k, v) in fields.items()}
-
-    def render(self, vals, funcs):
-        assert(type(vals)==dict)
-        out = {k : v.render(vals, funcs) for (k, v) in self.templates.items()}
-        return mess.Message(out)
+    def render(self, variable_values, function_values):
+        rendered_body = self.body.render(variable_values, function_values)
+        rendered_fields = {
+            field_name: field_value.render(variable_values, function_values)
+            for (field_name, field_value) in self.fields.items()
+        }
+        return mess.Message(rendered_fields, rendered_body)

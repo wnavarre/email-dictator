@@ -1,3 +1,10 @@
 SEND = False
 CONFIRMATION_EMAIL = ""
 SERVER = ""
+SEPARATOR = "@@@"
+HEADER_ENDING = "###"
+LAMBDA = "\\"
+BOOLEAN_STRICT = True
+BOOLEAN_DEFAULT = Exception
+CSV_DELIMITER = "\t"
+SERVER = "outgoing.mit.edu"
