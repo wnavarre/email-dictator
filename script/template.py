@@ -25,7 +25,7 @@ class Template():
         self.template_string = template_string
     def render(self, *args):
         return self.render_all(*args)
-    def render_all(self, variable_values, function_values):
+    def render_all(self, variable_values, function_values, onLookupFail=lambda x: False):
         '''
         returns a string where all fields of the template have been resolved according
         to variable_values and function_values.
@@ -39,9 +39,13 @@ class Template():
             if i%2 == 0:
                 to_append = fragments_in[i]
             else:
-                to_append = self.render_one(fragments_in[i], variable_values, function_values)
+                try:
+                    to_append = self.render_one(fragments_in[i], variable_values, function_values)
+                except(KeyError):
+                    if not onLookupFail(fragments_in[i]): raise
             fragments_out.append(to_append)
         return "".join(map(str, fragments_out))
+
     def render_one(self, placeholder, variable_values, function_values):
         if helper.starts_with(LAMBDA, placeholder):
             function_name = placeholder[len(LAMBDA):]
@@ -60,10 +64,18 @@ class EmailTemplate():
             self.fields[k] = Template(v)
         self.body = Template("".join(file_reference.readlines()))
 
-    def render(self, variable_values, function_values):
+    def render(self, variable_values, function_values, onFail=lambda x: False):
         rendered_body = self.body.render(variable_values, function_values)
-        rendered_fields = {
-            field_name: field_value.render(variable_values, function_values)
-            for (field_name, field_value) in self.fields.items()
-        }
-        return mess.Message(rendered_fields, rendered_body)
+        rendered_fields = {}
+        has_failed = False
+        def on_fail_local(failure):
+            has_failed = True
+            return onFail(failure)
+        rendered_fields = {field_name: field_value.render(variable_values, 
+                                                          function_values, 
+                                                          on_fail_local)
+                           for (field_name, field_value) in self.fields.items()}
+        if has_failed:
+            return Exception
+        else:
+            return mess.Message(rendered_fields, rendered_body)

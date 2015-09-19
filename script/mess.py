@@ -9,7 +9,7 @@ VALID_MESSAGE_HEADERS = ["To", "From", "Subject", "Cc"]
 VALID_MESSAGE_FIELDS = VALID_MESSAGE_HEADERS + ["Bcc", "Body"]
 
 def validateFields(fields):
-    '''Requre that all fields used are legitimate.
+    '''Require that all fields used are legitimate.
     return dictionary where all fields used.
     '''
     for i in fields:
