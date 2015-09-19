@@ -1,6 +1,5 @@
-SEND = False
-CONFIRMATION_EMAIL = ""
-SERVER = ""
+SEND = True
+CONFIRMATION_EMAIL = "navarre@mit.edu"
 SEPARATOR = "@@@"
 HEADER_ENDING = "###"
 LAMBDA = "\\"
@@ -8,3 +7,4 @@ BOOLEAN_STRICT = True
 BOOLEAN_DEFAULT = Exception
 CSV_DELIMITER = "\t"
 SERVER = "outgoing.mit.edu"
+SLEEP_TIME = 1

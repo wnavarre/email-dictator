@@ -1,8 +1,10 @@
 import smtplib
+import config
 
 from email.mime.text import MIMEText
 from time import sleep
 
+SLEEP_TIME = config.SLEEP_TIME
 VALID_MESSAGE_HEADERS = ["To", "From", "Subject", "Cc"]
 VALID_MESSAGE_FIELDS = VALID_MESSAGE_HEADERS + ["Bcc", "Body"]
 
@@ -53,5 +55,5 @@ class Message:
 
     def send(self, connection):
         connection.sendmail(self.from_envelope, self.to_envelope, self.msg_string)
-        sleep(5)
+        sleep(SLEEP_TIME)
     

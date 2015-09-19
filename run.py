@@ -1,17 +1,8 @@
 import script
-import helper
 
 TEMPLATE_FILE = "INP/template.txt"
 SPREADSHEET_FILE = "INP/spreadsheet.csv"
 
-def RELEVANT(vals, funcs):
-    return True
-    
-def care(vals, funcs):
-    if helper.get_boolean(vals["should I care?"]):
-        return "The spreadsheet says I should care."
-    else:
-        return "The spreadsheet says I ought not care too much."
-FUNCS = {"care": care}
-
-script.run(TEMPLATE_FILE, SPREADSHEET_FILE, RELEVANT, FUNCS)
+template_file = open(TEMPLATE_FILE)
+spreadsheet_file = open(SPREADSHEET_FILE)
+script.run_script(template_file, spreadsheet_file)
