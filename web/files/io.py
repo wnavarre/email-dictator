@@ -1,6 +1,7 @@
 import sqlite3
 import os
 import hashlib
+import constants
 
 HERE = os.path.dirname(__file__)
 
@@ -20,7 +21,7 @@ def put(files):
             file_pointer.write(contents)
         entry = (filename, filekey)
         db_entries.append(entry)
-    conn = sqlite3.connect("filedb.db")
+    conn = sqlite3.connect(constants.DBFILE)
     c = conn.cursor()
     all_hashes = "ZZZ".join(entry[1] for entry in db_entries)
     set_id = get_hash(all_hashes)
@@ -33,7 +34,9 @@ def put(files):
     return set_id
 
 def get(set_id):
-    conn = sqlite3.connect("filedb.db")
+    if not set_id:
+        return {}
+    conn = sqlite3.connect(constants.DBFILE)
     c = conn.cursor()
     key_list = list(c.execute('''SELECT filename, filekey FROM files WHERE fileset=?''', (set_id,)))
     conn.commit()

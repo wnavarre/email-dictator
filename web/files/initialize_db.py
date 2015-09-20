@@ -1,5 +1,6 @@
 import sqlite3
-conn = sqlite3.connect('filedb.db')
+import constants
+conn = sqlite3.connect(constants.DBFILE)
 c = conn.cursor()
 c.execute('''CREATE TABLE files (fileset text, filename text, filekey text)''')
 conn.commit()

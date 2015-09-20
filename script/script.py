@@ -44,6 +44,5 @@ def run_script(template_file, spreadsheet_file, RELEVANT = lambda x, y: True, fu
         confirm = "EMAILS SET TO SEND? "+str(config.SEND)+"\n"+"\n".join(email_str)    
         email_dict = {"Body": confirm, "Subject": "Confirmation", "From": config.CONFIRMATION_EMAIL, "To": config.CONFIRMATION_EMAIL}
         mess.Message(email_dict).send(connection)
-
     connection.quit()
     return True

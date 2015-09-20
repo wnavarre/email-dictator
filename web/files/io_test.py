@@ -10,8 +10,8 @@ def execute_test(input_dict):
 dicts = []
 
 dicts.append({})
-dicts.append({'file1': 'contents1'})
-dicts.append({'file2': '\n\ncontents2', 'file3':'contents3\n\n'})
+dicts.append({'spreadsheet': 'contents1'})
+dicts.append({'template': '\n\ncontents2', 'spreadsheet':'contents3\n\n'})
 
 for d in dicts:
     execute_test(d)
