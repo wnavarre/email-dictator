@@ -19,20 +19,18 @@ def run_script(template_file, spreadsheet_file, RELEVANT = lambda x, y: True, fu
 
     #MAKE ALL THE EMAILS.
     for row in rows:
-        print row
         if RELEVANT(row, funcs):
-            email = email_template.render(row, funcs, lookupFail)
+            email = email_template.render(row, funcs, onFail=lookupFail)
             emails.append(email)
 
-    print "HELLO"
     if missing_fields:
         output.write("ERROR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n")
         output.write("THE SYSTEM CANNOT RESOLVE THESE FIELDS:\n")
-        for field in list(missing_fields).sorted():
-            print repr(field)#debug
-            output.write(field + "\n")
+        for field in sorted(list(missing_fields)):
+            output.write("-> " + field + "\n")
         return False
 
+    return
     connection = smtplib.SMTP(config.SERVER)
             
     for i in emails:

@@ -23,9 +23,7 @@ def split_header(data):
 class Template():
     def __init__(self, template_string):
         self.template_string = template_string
-    def render(self, *args):
-        return self.render_all(*args)
-    def render_all(self, variable_values, function_values, onLookupFail=lambda x: False):
+    def render_all(self, variable_values, function_values, onLookupFail):
         '''
         returns a string where all fields of the template have been resolved according
         to variable_values and function_values.
@@ -41,8 +39,9 @@ class Template():
             else:
                 try:
                     to_append = self.render_one(fragments_in[i], variable_values, function_values)
-                except(KeyError):
-                    if not onLookupFail(fragments_in[i]): raise
+                except KeyError:
+                    caught = onLookupFail(fragments_in[i])
+                    if not caught: raise
             fragments_out.append(to_append)
         return "".join(map(str, fragments_out))
 
@@ -65,13 +64,17 @@ class EmailTemplate():
         self.body = Template("".join(file_reference.readlines()))
 
     def render(self, variable_values, function_values, onFail=lambda x: False):
-        rendered_body = self.body.render(variable_values, function_values)
-        rendered_fields = {}
         has_failed = False
         def on_fail_local(failure):
             has_failed = True
-            return onFail(failure)
-        rendered_fields = {field_name: field_value.render(variable_values, 
+            out = onFail(failure)
+            assert(out)
+            return out
+        rendered_body = self.body.render_all(variable_values,
+                                             function_values,
+                                             on_fail_local)
+        rendered_fields = {}
+        rendered_fields = {field_name: field_value.render_all(variable_values, 
                                                           function_values, 
                                                           on_fail_local)
                            for (field_name, field_value) in self.fields.items()}
