@@ -8,7 +8,7 @@ import sys
 
 CSV_DELIMITER = config.CSV_DELIMITER
 
-def run_script(template_file, spreadsheet_file, RELEVANT = lambda x, y: True, funcs = {}, output=sys.stdout, actually_send=config.CONFIRMATION_EMAIL):
+def run_script(template_file, spreadsheet_file, RELEVANT=lambda x, y: True, funcs = {}, output=sys.stdout, actually_send=config.SEND, send_confirmation_to=config.CONFIRMATION_EMAIL):
     email_template = template.EmailTemplate(template_file)
     rows = csv.DictReader(spreadsheet_file)
     emails = []
@@ -16,7 +16,6 @@ def run_script(template_file, spreadsheet_file, RELEVANT = lambda x, y: True, fu
     def lookupFail(key):
         missing_fields.add(key)
         return True
-
     #MAKE ALL THE EMAILS.
     for row in rows:
         if RELEVANT(row, funcs):
@@ -29,20 +28,20 @@ def run_script(template_file, spreadsheet_file, RELEVANT = lambda x, y: True, fu
         for field in sorted(list(missing_fields)):
             output.write("-> " + field + "\n")
         return False
-
-    return
     connection = smtplib.SMTP(config.SERVER)
-            
-    for i in emails:
-        output.write(str(i)+"\n")
 
-    if config.SEND:
+    if actually_send:
         for email in emails:
             email.send(connection)
-    if config.CONFIRMATION_EMAIL:
-        email_str = [str(email) for email in emails]
-        confirm = "EMAILS SET TO SEND? "+str(config.SEND)+"\n"+"\n".join(email_str)    
-        email_dict = {"Body": confirm, "Subject": "Confirmation", "From": config.CONFIRMATION_EMAIL, "To": config.CONFIRMATION_EMAIL}
-        mess.Message(email_dict).send(connection)
+
+    email_str = [str(email) for email in emails]
+    confirm = "EMAILS SET TO SEND? "+str(actually_send)+"\n"+"\n".join(email_str)    
+    if send_confirmation_to:
+        email_dict = {"Subject": "Confirmation", "From": send_confirmation_to, "To": send_confirmation_to}
+        mess.Message(email_dict, confirm).send(connection)
     connection.quit()
+    output.write(confirm)
     return True
+
+def get_mailserver_connection():
+    return smtplib.SMTP(config.SERVER)

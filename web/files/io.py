@@ -1,7 +1,7 @@
-import sqlite3
 import os
 import hashlib
 import constants
+import sqlite3
 
 HERE = os.path.dirname(__file__)
 
@@ -24,7 +24,8 @@ def put(files):
     conn = sqlite3.connect(constants.DBFILE)
     c = conn.cursor()
     all_hashes = "ZZZ".join(entry[1] for entry in db_entries)
-    set_id = get_hash(all_hashes)
+    all_filenames = repr(sorted(files.keys()))
+    set_id = get_hash(all_hashes + all_filenames)
     for entry in db_entries:
         c.execute('''
         INSERT INTO files VALUES

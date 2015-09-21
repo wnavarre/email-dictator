@@ -1,22 +1,64 @@
 <html>
   <head>
     <title>ESP Email Script</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script type="text/javascript">
+    $$(document).ready(function() {
+	$$("#send_editor_email").submit( function(event) {
+	    event.preventDefault();
+	    document.getElementById("editor_button").disabled = true;
+	    document.getElementById("editor_email_status").innerHTML = "Working";
+	    formData = {
+		'msg_key' : $$('input[name=msg_key]').val(),
+		'editor_email' : $$('input[name=editor_email]').val()
+	    };
+	    console.log(formData);
+	    console.log($$.param(formData));
+	    complete = function(response, st) {
+		console.log(response.responseText);
+		data = $$.parseJSON(response.responseText)
+		console.log(data);
+		document.getElementById("editor_button").disabled = false;
+		if(data.success === "success"){
+		    document.getElementById("editor_email_status").innerHTML = "Success";
+		}else{
+		    document.getElementById("editor_email_status").innerHTML = "Failure";
+		};
+	    };
+	    $$.ajax({
+		type : 'GET',
+		url : 'sendconfirm.cgi',
+		data : $$.param(formData),
+		datatype : 'json',
+		encode : true,
+		async : true,
+		complete : complete
+	    });
+	});
+    });
+      
+    </script>
   </head>
   <body>
     <h1>Review the email!</h1>
     <p>Below is a preview of all the emails that will be sent when you press the SEND button at the BOTTOM of this page.</p>
     <hr />
-    <pre style="white-space: pre-wrap;">
-      $output
-    </pre>
-    <hr />
-    <form>
+    <form id="send_editor_email">
       EDITOR:<input type="text" name="editor_email"></input>
-      <button>Send proof</button>
-      <br />
-      <a href="#">Back to edit!</a>
+      <button id="editor_button">Submit preview to editor. (Can be a list).</button>
+      <div id="editor_email_status"></div>
     </form>
+    <br />
     <hr />
-    $proof
+    <h2>Edit!</h2>
+    <a href="edit.cgi?msg_key=$key">FIX AN ERROR ON THIS MESSAGE. (This creates a new message based on this one).</a>
+    <hr />
+    <h2>Output from script</h2>
+    <textarea readonly="readonly" rows="40" cols="80">$stdout</textarea>
+    <hr />
+    <form action="send.cgi">
+      <input type="hidden" name="msg_key" value="$key"></input>
+      $button
   </body>
+
 </html>

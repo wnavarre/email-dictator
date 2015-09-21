@@ -3,7 +3,7 @@ import cgi
 import constants
 import files.io
 import files.constants
-import helper
+import web_helper as helper
 import sys
 
 fields = cgi.FieldStorage()
@@ -15,5 +15,5 @@ for field_name in constants.MAIN_SCRIPT_INPUTS:
     except KeyError:
         pass
 key = files.io.put(to_save)
-print "Location: edit.cgi?msg_key="+str(key)
+print "Location: review.cgi?msg_key="+str(key)
 print ""

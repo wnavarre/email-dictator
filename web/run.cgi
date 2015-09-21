@@ -1,5 +1,5 @@
 #!/usr/bin/env python
 import cgi
-import helper
+import web_helper as helper
 
 helper.headers()
