@@ -29,7 +29,7 @@ def put(files):
     for entry in db_entries:
         c.execute('''
         INSERT INTO files VALUES
-        (?, ?, ?)''', (set_id,) + entry)
+        (?, ?, ?)''', (set_id,) + entry) # entry is a (filename, filekey) pair.
     conn.commit()
     conn.close()
     return set_id

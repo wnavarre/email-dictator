@@ -8,3 +8,4 @@ BOOLEAN_DEFAULT = Exception
 CSV_DELIMITER = "\t"
 SERVER = "outgoing.mit.edu"
 SLEEP_TIME = 1
+DEFAULT_CONSTANTS = lambda: {}

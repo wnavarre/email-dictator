@@ -1,1 +1,4 @@
-MAIN_SCRIPT_INPUTS = ["template", "spreadsheet"]
+MAIN_SCRIPT_INPUTS = ["template", "spreadsheet", "constants"]
+CONFIRMATION_EMAIL_FROM = "esp-email@mit.edu"
+CONFIRMATION_EMAIL_SUBJECT = "ESP EMAIL SCRIPT CONFIRMATION"
+

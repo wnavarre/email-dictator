@@ -2,6 +2,7 @@ import sys
 import os
 import files.io
 from StringIO import StringIO
+from constants import *
 
 added_path = os.path.join(os.path.dirname(os.path.abspath(os.path.dirname(__file__))), "script")
 sys.path.append(added_path)
@@ -9,8 +10,6 @@ import script
 import mess
 sys.path.pop()
 
-CONFIRMATION_EMAIL_FROM = "esp-email@mit.edu"
-CONFIRMATION_EMAIL_SUBJECT = "ESP EMAIL SCRIPT CONFIRMATION"
 def full_file(pointer):
     pointer.seek(0)
     return pointer.read()
@@ -33,6 +32,8 @@ def run_on(key, actually_send=False, confirmation_email=CONFIRMATION_EMAIL_FROM,
         pass
     else:
         kwargs["send_confirmation_to"] = None
+    if input_files["constants"]:
+        kwargs["constants"] = StringIO(input_files["constants"])
     success = script.run_script(
         StringIO(input_files["template"]),
         StringIO(input_files["spreadsheet"]),

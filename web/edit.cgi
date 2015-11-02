@@ -12,4 +12,6 @@ HERE = os.path.dirname(__file__)
 fields = cgi.FieldStorage()
 template_dict = helper.get_main_files_from_FieldStorage(fields)
 template_path = os.path.join(HERE, "templates", "edit.html")
+if "constants" not in template_dict:
+    template_dict["constants"] = "";
 print helper.web_template(template_path).substitute(**template_dict)
