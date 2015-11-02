@@ -13,7 +13,7 @@ def run_script(template_file, spreadsheet_file, RELEVANT=lambda x, y: True, func
     rows = csv.DictReader(spreadsheet_file)
     constant_mappings = {}
     if constant_mappings is not None:
-        constant_rows = csv.DictReader(spreadsheet_file, fieldnames=("key", "val"))
+        constant_rows = csv.DictReader(spreadsheet_file, fieldnames=("key", "val"), delimiter="\t")
         for contant_row in constant_rows:
             if constant_row["key"] in constant_mappings:
                 output.write("ERROR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n")
