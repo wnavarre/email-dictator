@@ -10,7 +10,6 @@ CSV_DELIMITER = config.CSV_DELIMITER
 
 def run_script(template_file, spreadsheet_file, RELEVANT=lambda x, y: True, funcs = {}, constants=None, output=sys.stdout, actually_send=config.SEND, send_confirmation_to=config.CONFIRMATION_EMAIL):
     email_template = template.EmailTemplate(template_file)
-    rows = csv.DictReader(spreadsheet_file)
     constant_mappings = {}
     if constant_mappings is not None:
         constant_rows = csv.DictReader(spreadsheet_file, fieldnames=("key", "val"), delimiter="\t")
@@ -20,7 +19,7 @@ def run_script(template_file, spreadsheet_file, RELEVANT=lambda x, y: True, func
                 output.write("A REPEAT CONSTANT IS PROVIDED!\n")
                 return false
             constant_mappings[constant_row["key"]] = constant_row["val"]
-
+    rows = csv.DictReader(spreadsheet_file, delimiter="\t")
     emails = []
     missing_fields = set([])
     def lookupFail(key):

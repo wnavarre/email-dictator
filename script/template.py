@@ -1,9 +1,10 @@
 import config
 import template
 import string
-import helper
+import aux
 import email
 import mess
+import sys
 
 HEADER_ENDING = config.HEADER_ENDING
 SEPARATOR = config.SEPARATOR
@@ -46,7 +47,7 @@ class Template():
         return "".join(map(str, fragments_out))
 
     def render_one(self, placeholder, variable_values, function_values):
-        if helper.starts_with(LAMBDA, placeholder):
+        if aux.starts_with(LAMBDA, placeholder):
             function_name = placeholder[len(LAMBDA):]
             return function_values[function_name](variable_values, function_values)
         else:

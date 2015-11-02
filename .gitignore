@@ -1,3 +1,4 @@
 *.pyc
 web/files/data/*
 web/files/dbdata/*
+.htaccess
