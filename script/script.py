@@ -10,7 +10,7 @@ CSV_DELIMITER = config.CSV_DELIMITER
 
 def run_script(template_file, spreadsheet_file, RELEVANT=lambda x, y: True, funcs = {}, output=sys.stdout, actually_send=config.SEND, send_confirmation_to=config.CONFIRMATION_EMAIL):
     email_template = template.EmailTemplate(template_file)
-    rows = csv.DictReader(spreadsheet_file)
+    rows = csv.DictReader(spreadsheet_file, delimiter="\t")
     emails = []
     missing_fields = set([])
     def lookupFail(key):
