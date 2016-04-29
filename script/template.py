@@ -47,7 +47,7 @@ class Template():
         return "".join(map(str, fragments_out))
 
     def render_one(self, placeholder, variable_values, function_values):
-        if aux.starts_with(LAMBDA, placeholder):
+        if auxilary_not_fucking_aux_because_windows.starts_with(LAMBDA, placeholder):
             function_name = placeholder[len(LAMBDA):]
             return function_values[function_name](variable_values, function_values)
         else:
