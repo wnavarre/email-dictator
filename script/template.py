@@ -1,7 +1,7 @@
 import config
 import template
 import string
-import aux
+import auxilary_not_fucking_aux_because_windows
 import email
 import mess
 import sys
