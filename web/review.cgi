@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 import cgi
-import files.io
 import os
 import web_helper as helper
 import run_on
@@ -25,5 +24,7 @@ else:
         template = helper.web_template(os.path.join(HERE, "templates", "review.html"))
         print template.substitute(key=key, stdout=result, button=button)
     except Exception as e:
-        print "Error in script. Traceback below."
-        traceback.print_exc()
+        body = "Error in script. Traceback below." + traceback.format_exc()
+        template = helper.web_template(os.path.join(HERE, "templates",
+            "error.html"))
+        print template.substitute(body=cgi.escape(body))
