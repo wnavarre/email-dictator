@@ -13,7 +13,7 @@ def validateFields(fields):
     return dictionary where all fields used.
     '''
     for i in fields:
-        assert i in VALID_MESSAGE_FIELDS,
+        assert i in VALID_MESSAGE_FIELDS, \
             "Message field {} is invalid".format(i)
     out = {}
     for i in VALID_MESSAGE_FIELDS:
