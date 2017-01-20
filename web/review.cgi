@@ -24,7 +24,7 @@ else:
         template = helper.web_template(os.path.join(HERE, "templates", "review.html"))
         print template.substitute(key=key, stdout=result, button=button)
     except Exception as e:
-        body = "Error in script. Traceback below." + traceback.format_exc()
+        error = "<PRE>" + cgi.escape(traceback.format_exc()) + "</PRE>"
         template = helper.web_template(os.path.join(HERE, "templates",
             "error.html"))
-        print template.substitute(body=cgi.escape(body))
+        print template.substitute(body=error)
