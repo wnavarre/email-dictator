@@ -26,7 +26,8 @@ def send_confirmation_email(recipient, contents):
 
 def run_on(key, actually_send=False, confirmation_email=CONFIRMATION_EMAIL_FROM, confirmation_email_on_success=True, confirmation_email_on_fail=True, special_text="", send_default_confirmation=False):
     input_files = files.io.get(key)
-    assert "template" in input_files
+    assert "template" in input_files, "Need to submit non-empty template"
+    assert "spreadsheet" in input_files, "Need to submit non-empty spreadsheet"
     output_location = StringIO()
     kwargs = {}
     if send_default_confirmation:
