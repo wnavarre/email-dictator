@@ -24,7 +24,7 @@ template_dict["template"] = (
         "Your body goes here! You can use @@@variables@@@ which go in the "
         "spreadsheet below if you wish.\n"
         "\n"
-        "When you're done, press submit below to preview.!\n"
+        "When you're done, press submit below to preview. Have fun!\n"
 )
 if "constants" not in template_dict:
     template_dict["constants"] = ""
